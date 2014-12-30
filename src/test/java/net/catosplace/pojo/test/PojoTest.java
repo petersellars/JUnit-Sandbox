@@ -12,7 +12,7 @@ import com.openpojo.validation.PojoValidator;
 import com.openpojo.validation.affirm.Affirm;
 
 public class PojoTest {
-	
+
     // Configured for expectation, so we know when a class gets added or removed.
     private static final int EXPECTED_CLASS_COUNT = 1;
 
@@ -20,17 +20,24 @@ public class PojoTest {
     private static final String POJO_PACKAGE = "net.catosplace.pojo";
 
     private List<PojoClass> pojoClasses;
-	private PojoValidator pojoValidator;
-	
-	@Before
-	public void prepareValidator() {
+    private PojoValidator pojoValidator;
+
+    @Before
+    public void prepareValidator() {
         pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
         pojoValidator = new PojoValidator();
-	}
-	
-	@Test
+    }
+
+    @Test
     public void ensureExpectedPojoCount() {
         Affirm.affirmEquals("Classes added / removed?", EXPECTED_CLASS_COUNT, pojoClasses.size());
+    }
+
+    @Test
+    public void testPojoStructureAndBehaviour() {
+        for (PojoClass pojoClass : pojoClasses) {
+            pojoValidator.runValidation(pojoClass);
+        }
     }
 
 }
